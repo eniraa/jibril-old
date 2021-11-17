@@ -14,5 +14,8 @@ if os.name != "nt":
 bot = lightbulb.Bot(token=os.environ.get("DISCORD_TOKEN"), slash_commands_only=True)
 
 bot.run(
-    activity=hikari.Activity(name="Night Opera lose", type=hikari.ActivityType.WATCHING)
+    status=hikari.Status.IDLE,
+    activity=hikari.Activity(
+        name="Night Opera lose", type=hikari.ActivityType.WATCHING
+    ),
 )
