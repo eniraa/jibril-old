@@ -23,13 +23,16 @@ isort = "^5.10.1"
 pre-commit = "^2.15.0"
 taskipy = "^1.9.0"
 
+[tool.poetry.extras]
+unix = ["uvloop"]
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.taskipy.tasks]
-reformat = { cmd = "black . && isort .", help = "Reformats code to conform to some lints" }
-black = { cmd = "black --check .", help = "Dry run of black" }
-flake8 = { cmd = "python -m flake8", help = "Lints code with flake8" }
-lint = { cmd = "pre-commit run --all-files", help = "Checks all files for CI errors" }
-precommit = { cmd = "pre-commit install --install-hooks", help = "Installs the precommit hook" }
+reformat = {cmd = "black . && isort .", help = "Reformats code to conform to some lints"}
+black = {cmd = "black --check .", help = "Dry run of black"}
+flake8 = {cmd = "python -m flake8", help = "Lints code with flake8"}
+lint = {cmd = "pre-commit run --all-files", help = "Checks all files for CI errors"}
+precommit = {cmd = "pre-commit install --install-hooks", help = "Installs the precommit hook"}
