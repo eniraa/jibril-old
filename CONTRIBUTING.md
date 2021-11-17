@@ -4,6 +4,8 @@ Thank you for investing your time in contributing to Shiro. In this document, yo
 
 ## Getting started
 
+First, clone the repository with `git clone https://github.com/eniraa/shiro.git`. Afterwards, set your current directory to the directory the repo was cloned in.
+
 Shiro uses Poetry to manage dependencies. You can install it [here](https://python-poetry.org/docs/#installation).
 
 After installing Poetry, simply run `poetry install` to install all dependencies. If something does not work, make sure that you are using Python 3.10. You can force Poetry to use this version if you have it installed via `poetry env use 3.10`, but otherwise, install Python 3.10 [here](https://www.python.org/downloads/).

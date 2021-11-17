@@ -693,13 +693,10 @@ python-versions = ">=3.6"
 idna = ">=2.0"
 multidict = ">=4.0"
 
-[extras]
-unix = ["uvloop"]
-
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10"
-content-hash = "3f4a7b250fd4aa8cd2f4c3420985c91647759897701f4987fd1f1ce6284ae304"
+content-hash = "9ad765cdcc9fba7b626d406f24b0575fb498207af741cc6a61411ffa10cd9044"
 
 [metadata.files]
 aiodns = [
