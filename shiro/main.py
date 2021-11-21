@@ -11,9 +11,14 @@ try:
 
     uvloop.install()
 finally:
-    bot = lightbulb.Bot(token=os.environ.get("DISCORD_TOKEN"), slash_commands_only=True)
+    modules = ["chess"]
 
-    bot.run(
+    shiro = lightbulb.BotApp(token=os.environ.get("DISCORD_TOKEN"))
+
+    for module in modules:
+        __import__(module).load(shiro)
+
+    shiro.run(
         status=hikari.Status.IDLE,
         activity=hikari.Activity(
             name="Night Opera lose", type=hikari.ActivityType.WATCHING
