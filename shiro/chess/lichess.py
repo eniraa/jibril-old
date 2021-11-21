@@ -22,10 +22,5 @@ async def profile(ctx: lightbulb.context.Context) -> None:
     await ctx.respond(data.__repr__())
 
 
-def load(bot: lightbulb.BotApp) -> None:
-    """Loads the module
-
-    Args:
-        bot (lightbulb.BotApp): The bot to load the module into
-    """
+def _load(bot: lightbulb.BotApp) -> None:
     bot.command(lichess)
