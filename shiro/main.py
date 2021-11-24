@@ -1,26 +1,62 @@
+import importlib
 import os
+from typing import Sequence
 
 from dotenv import load_dotenv
 import hikari
 import lightbulb
 
-load_dotenv()
+import utils.defaults
 
-try:
-    import uvloop
 
-    uvloop.install()
-finally:
-    modules = ["chess"]
+def main(
+    token: str,
+    *,
+    modules: Sequence[str] = (),
+    guilds: Sequence[int] = (),
+    status: hikari.Status = hikari.Status.IDLE,
+    activity: hikari.Activity = utils.defaults.NIGHT_OPERA,
+) -> None:
+    """Starts the bot.
 
-    shiro = lightbulb.BotApp(token=os.environ.get("DISCORD_TOKEN"))
+    Args:
+        token (str): The token to use to start the bot.
+        modules (Sequence[str], optional): The modules to load when starting the bot.
+            Defaults to ().
+        guilds (Sequence[int], optional): The list of guild IDs to enable guild commands
+            in. Note that this makes testing significantly easier, as guild commands are
+            instantly updated. Defaults to ().
+        status (hikari.Status, optional): The status to start the bot with. Defaults to
+            hikari.Status.IDLE.
+        activity (hikari.Activity, optional): The activity to start the bot with.
+            Defaults to hikari.Activity( name="Night Opera lose",
+            type=hikari.ActivityType.WATCHING ).
+    """
+    shiro = lightbulb.BotApp(token=token, default_enabled_guilds=guilds)
 
     for module in modules:
-        __import__(module).load(shiro)
+        importlib.import_module(module).load(shiro)
 
     shiro.run(
-        status=hikari.Status.IDLE,
-        activity=hikari.Activity(
-            name="Night Opera lose", type=hikari.ActivityType.WATCHING
-        ),
+        status=status,
+        activity=activity,
     )
+
+
+if __name__ == "__main__":
+    try:
+        import uvloop
+
+        uvloop.install()
+    finally:
+        load_dotenv()
+
+        kwargs = {
+            "token": os.environ.get("DISCORD_TOKEN"),
+            "modules": utils.defaults.MODULES,
+        }
+
+        if "HOME_GUILD" in os.environ:
+            kwargs["guilds"] = (int(os.environ["HOME_GUILD"]),)
+
+        main(**kwargs)
