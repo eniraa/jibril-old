@@ -29,8 +29,7 @@ def main(
         status (hikari.Status, optional): The status to start the bot with. Defaults to
             hikari.Status.IDLE.
         activity (hikari.Activity, optional): The activity to start the bot with.
-            Defaults to hikari.Activity( name="Night Opera lose",
-            type=hikari.ActivityType.WATCHING ).
+            Defaults to utils.defaults.NIGHT_OPERA.
     """
     shiro = lightbulb.BotApp(token=token, default_enabled_guilds=guilds)
 
