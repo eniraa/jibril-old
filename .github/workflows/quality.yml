@@ -1,4 +1,4 @@
-name: "Quality Check"
+name: Quality Check
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
     branches:
       - "*"
   schedule:
-    - cron: '17 5 * * 0'
+    - cron: "17 5 * * 0"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.repository }}-${{ github.ref }}
@@ -58,7 +58,7 @@ jobs:
       - name: Perform FOSSA Analysis
         uses: fossas/fossa-action@main
         with:
-          api-key: ${{secrets.FOSSA_API_KEY}}
+          api-key: ${{ secrets.FOSSA_API_KEY }}
 
   lint:
     runs-on: ubuntu-latest
