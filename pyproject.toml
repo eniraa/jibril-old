@@ -3,7 +3,7 @@ name = "shiro"
 version = "0.1.0"
 description = "A Discord bot for chess players"
 authors = ["eniraa <47072520+eniraa@users.noreply.github.com>"]
-license = "MIT"
+license = "LGPL-3.0-only"
 
 [tool.poetry.dependencies]
 python = "3.10"
