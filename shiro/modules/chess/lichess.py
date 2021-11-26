@@ -1,8 +1,10 @@
+import logging
+
 import hikari
 import lightbulb
 import requests
 
-import utils.flags
+import utils.lichess
 
 
 @lightbulb.command("lichess", "All lichess commands")
@@ -27,90 +29,90 @@ async def profile(ctx: lightbulb.context.Context) -> None:
         await ctx.respond("This account is closed")
 
     else:
-        print(data)
-        if data["online"]:
-            statemoji = "<:status_online:902261836781613096>" + " (Online)"
-
+        if data.get("patron"):
+            if data["online"]:
+                state = utils.lichess.EMOJI["status"]["patron"]["online"]
+            else:
+                state = utils.lichess.EMOJI["status"]["patron"]["offline"]
         else:
-            statemoji = "<:status_offline:902261836794200074>" + " (Offline)"
+            if data["online"]:
+                state = utils.lichess.EMOJI["status"]["normie"]["online"]
+            else:
+                state = utils.lichess.EMOJI["status"]["normie"]["offline"]
 
-        country = data["profile"]["country"]
-        print(country)
-        flag1 = utils.flags.lichess_flag(country)
+        logging.debug(f"Lichess profile of {ctx.options.username}: {data.__repr__()}")
+
+        if profile := data.get("profile"):
+            location = ""
+            if "country" in profile:
+                location += utils.lichess.flag(profile["country"])
+            if "location" in profile:
+                location += " " + profile["location"]
+
+            description = f"{profile.get('bio', '')}\n\n{location}"
+        else:
+            description = None
 
         count = data["count"]
-        blitzrating = str(data["perfs"]["blitz"]["rating"])
-        bulletrating = str(data["perfs"]["bullet"]["rating"])
-        rapidrating = str(data["perfs"]["rapid"]["rating"])
-        classicalrating = str(data["perfs"]["classical"]["rating"])
 
-        if "prov" in data["perfs"]["blitz"]:
-            blitzrating += "?"
-        if "prov" in data["perfs"]["rapid"]:
-            rapidrating += "?"
-        if "prov" in data["perfs"]["bullet"]:
-            bulletrating += "?"
-        if "prov" in data["perfs"]["classical"]:
-            classicalrating += "?"
-
-        Games = (
-            str(count["all"])
-            + " ("
-            + str(count["win"])
-            + " Wins - "
-            + str(count["draw"])
-            + " Draws - "
-            + str(count["loss"])
-            + " Losses)"
+        games = (
+            f"**Wins: {count['win']}**\n**Losses: {count['loss']}**\n**Draws: "
+            + f"{count['draw']}**\nRated: {count['rated']}\nBot: {count['ai']}\n\n*"
+            + f"{data['completionRate']}% completion*"
         )
-        URL = data.get("url")
-        profile = data.get("profile")
-        Description = profile.get("bio") or "This user's biography is empty"
+
+        title = f" [{data.get('title')}]" if "title" in data else ""
 
         embed = (
-            hikari.Embed(title=data["username"], url=URL, description="")
+            hikari.Embed(
+                title=f"{state}{title} {data['username']}",
+                url=data["url"],
+                description=description,
+            )
             .set_thumbnail("https://imgur.com/r3eEAy3.png")
-            .add_field(name="Status:", value=statemoji, inline=False)
-            .add_field(name="Games", value=Games, inline=False)
-            .add_field(name="Bio: ", value=Description, inline=False)
-            .add_field(name="Country: ", value=flag1, inline=False)
             .add_field(
-                name="<:blitz:902261836899037234>"
-                + "Blitz ["
-                + str(data["perfs"]["blitz"]["games"])
-                + "]",
-                value=blitzrating,
-                inline=True,
-            )
-            .add_field(
-                name="<:rapid:902261836789993532>"
-                + "Rapid ["
-                + str(data["perfs"]["rapid"]["games"])
-                + "]",
-                value=rapidrating,
-                inline=True,
-            )
-            .add_field(
-                name="<:classical:902428900020338728>"
-                + "Classical ["
-                + str(data["perfs"]["classical"]["games"])
-                + "]",
-                value=classicalrating,
-                inline=True,
-            )
-            .add_field(
-                name="<:bullet:902261836752240640>"
-                + "Bullet ["
-                + str(data["perfs"]["bullet"]["games"])
-                + "]",
-                value=bulletrating,
-                inline=True,
+                name=f"{utils.lichess.EMOJI['other']['challenge']} Games "
+                + f"[{count['all']}]",
+                value=games,
+                inline=False,
             )
         )
 
-        await ctx.respond(embed)
+        for mode in utils.lichess.DISPLAY_MODES:
+            if mode not in data.get("perfs", []):
+                continue
 
-    # await ctx.respond(data.__repr__())
+            display = utils.lichess.mode_display(mode)
+            emoji = utils.lichess.mode_emoji(mode)
+            performance = data["perfs"][mode]
+
+            if "rating" in performance:
+                rating = performance["rating"]
+                games = performance["games"]
+                deviation = performance["rd"]
+                if (prog := performance["prog"]) > 0:
+                    progression = f"\n{utils.lichess.EMOJI['other']['up']} {prog}"
+                elif prog < 0:
+                    progression = f"\n{utils.lichess.EMOJI['other']['down']} {prog}"
+                else:
+                    progression = ""
+
+                embed = embed.add_field(
+                    name=f"{emoji} {display} [{games}]",
+                    value=f"{utils.lichess.EMOJI['other']['rating']} {rating} ± "
+                    + f"{deviation} {progression}",
+                    inline=True,
+                )
+            else:
+                rating = performance["score"]
+                games = performance["runs"]
+                embed = embed.add_field(
+                    name=f"{emoji} {display} [{games}]",
+                    value=f"{utils.lichess.EMOJI['other']['rating']} {rating}",
+                    inline=True,
+                )
+
+        await ctx.respond(embed)
 
 
 def _load(bot: lightbulb.BotApp) -> None:

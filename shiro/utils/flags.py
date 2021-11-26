@@ -24,20 +24,3 @@ def _tag(code: Sequence[str]) -> str:
         + "".join(map(lambda char: chr(ord(char.upper()) + TAG_OFFSET), code))
         + CANCELTAG
     )
-
-
-def lichess_flag(code: str) -> str:
-    """Returns the string to use on Discord for a given country from lichess.
-
-    Args:
-        code (str): The country code given.
-
-    Returns:
-        str: The emoji string to use.
-    """
-    if code in LICHESS_FLAGS:
-        return LICHESS_FLAGS[code]
-    elif len(code) == 2:
-        return _regional_indicator(code)
-    else:
-        return _tag(code)
