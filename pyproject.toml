@@ -3,14 +3,17 @@ name = "shiro"
 version = "0.1.0"
 description = "A Discord bot for chess players"
 authors = ["eniraa <47072520+eniraa@users.noreply.github.com>"]
-license = "MIT"
+license = "LGPL-3.0-only"
 
 [tool.poetry.dependencies]
 python = "3.10"
-hikari = {extras = ["speedups"], version = "^2.0.0-alpha.103"}
-hikari-lightbulb = "^1.5.2"
-uvloop = "^0.16.0"
+hikari = {extras = ["speedups"], version = "^2.0.0.dev104"}
+hikari-lightbulb = "^2.0.1"
+uvloop = {version = "^0.16.0", markers = "sys_platform != 'win32'"}
 python-dotenv = "^0.19.1"
+requests = "^2.26.0"
+PyYAML = "^6.0"
+beautifulsoup4 = "^4.10.0"
 
 [tool.poetry.dev-dependencies]
 black = "^21.10b0"
@@ -22,9 +25,6 @@ flake8-isort = "^4.1.1"
 isort = "^5.10.1"
 pre-commit = "^2.15.0"
 taskipy = "^1.9.0"
-
-[tool.poetry.extras]
-unix = ["uvloop"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
