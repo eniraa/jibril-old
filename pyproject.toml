@@ -13,6 +13,7 @@ uvloop = {version = "^0.16.0", markers = "sys_platform != 'win32'"}
 python-dotenv = "^0.19.1"
 requests = "^2.26.0"
 PyYAML = "^6.0"
+beautifulsoup4 = "^4.10.0"
 
 [tool.poetry.dev-dependencies]
 black = "^21.10b0"

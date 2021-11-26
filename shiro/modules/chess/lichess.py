@@ -1,5 +1,6 @@
 import logging
 
+import bs4
 import hikari
 import lightbulb
 import requests
@@ -25,6 +26,16 @@ async def profile(ctx: lightbulb.context.Context) -> None:
     """
     data = requests.get(f"https://lichess.org/api/user/{ctx.options.username}").json()
 
+    soup = bs4.BeautifulSoup(requests.get(data["url"]).text, "html.parser")
+
+    trophies = []
+
+    for trophy in soup.find_all(class_="trophy"):
+        for emoji in utils.lichess.EMOJI["trophy"]:
+            if emoji in trophy["class"]:
+                trophies.append(utils.lichess.EMOJI["trophy"][emoji])
+                break
+
     if data.get("disabled"):
         await ctx.respond("This account is closed")
 
@@ -42,24 +53,22 @@ async def profile(ctx: lightbulb.context.Context) -> None:
 
         logging.debug(f"Lichess profile of {ctx.options.username}: {data.__repr__()}")
 
-        if profile := data.get("profile"):
-            location = ""
-            if "country" in profile:
-                location += utils.lichess.flag(profile["country"])
-            if "location" in profile:
-                location += " " + profile["location"]
+        description = [" ".join(trophies)]
 
-            description = f"{profile.get('bio', '')}\n\n{location}"
-        else:
-            description = None
+        if profile := data.get("profile"):
+            if "bio" in profile:
+                description.append(profile["bio"])
+
+            location = []
+            if "country" in profile:
+                location.append(utils.lichess.flag(profile["country"]))
+            if "location" in profile:
+                location.append(profile["location"])
+
+            if location:
+                description.append(" ".join(location))
 
         count = data["count"]
-
-        games = (
-            f"**Wins: {count['win']}**\n**Losses: {count['loss']}**\n**Draws: "
-            + f"{count['draw']}**\nRated: {count['rated']}\nBot: {count['ai']}\n\n*"
-            + f"{data['completionRate']}% completion*"
-        )
 
         title = f" [{data.get('title')}]" if "title" in data else ""
 
@@ -67,13 +76,14 @@ async def profile(ctx: lightbulb.context.Context) -> None:
             hikari.Embed(
                 title=f"{state}{title} {data['username']}",
                 url=data["url"],
-                description=description,
+                description="\n\n".join(description),
             )
             .set_thumbnail("https://imgur.com/r3eEAy3.png")
             .add_field(
                 name=f"{utils.lichess.EMOJI['other']['challenge']} Games "
                 + f"[{count['all']}]",
-                value=games,
+                value=f"{count['win']} wins | {count['loss']} losses | {count['draw']} "
+                + f"draws\n*{data.get('completionRate', 100)}% completion*",
                 inline=False,
             )
         )
