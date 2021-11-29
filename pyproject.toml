@@ -8,7 +8,7 @@ license = "LGPL-3.0-only"
 [tool.poetry.dependencies]
 python = "3.10"
 hikari = {extras = ["speedups"], version = "^2.0.0.dev104"}
-hikari-lightbulb = "^2.0.1"
+hikari-lightbulb = "^2.0.2"
 uvloop = {version = "^0.16.0", markers = "sys_platform != 'win32'"}
 python-dotenv = "^0.19.1"
 requests = "^2.26.0"
