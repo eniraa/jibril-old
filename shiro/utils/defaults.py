@@ -11,7 +11,7 @@ MODULES = [
 NIGHT_OPERA = hikari.Activity(
     name="Night Opera lose", type=hikari.ActivityType.WATCHING
 )
-with open(Path(__file__).parent / "constants.json", "r") as file:
+with open(Path(__file__).parent / "constants.json", "rb") as file:
     CONSTANTS = orjson.loads(file.read())
 
 MPL_COLOR = "white"
