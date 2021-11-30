@@ -24,6 +24,8 @@ async def profile(ctx: lightbulb.context.Context) -> None:
     user = await lichess_models.LichessUser.load(ctx.options.username)
     embed = lichess_models.LichessUserFormatter.bio_embed(user)
 
+    embeds = {"profile": embed, "rating": None, "history": None}
+
     if user.disabled:
         await ctx.respond(embed)
         return
@@ -65,11 +67,18 @@ async def profile(ctx: lightbulb.context.Context) -> None:
         async for event in stream:
             match event.interaction.values[0]:
                 case "profile":
-                    embed = lichess_models.LichessUserFormatter.bio_embed(user)
+                    embed = embeds["profile"]
                 case "rating":
-                    embed = lichess_models.LichessUserFormatter.rating_embed(user)
+                    embed = embeds[
+                        "rating"
+                    ] or lichess_models.LichessUserFormatter.rating_embed(user)
                 case "history":
-                    embed = await lichess_models.LichessUserFormatter.graph_embed(user)
+                    embed = embeds[
+                        "history"
+                    ] or await lichess_models.LichessUserFormatter.graph_embed(user)
+
+            if not embeds[event.interaction.values[0]]:
+                embeds[event.interaction.values[0]] = embed
 
             try:
                 await event.interaction.create_initial_response(
