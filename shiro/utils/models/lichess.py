@@ -13,7 +13,9 @@ import humanize
 import lightbulb
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy
 import orjson
+import pandas
 import validators
 
 from utils.defaults import CONSTANTS, MPL_COLOR
@@ -58,7 +60,7 @@ class LichessHistoryData:
     """All historical ratings for a given mode."""
 
     mode: LichessMode
-    history: list[LichessHistoryPoint]
+    history: pandas.DataFrame
 
 
 @dataclass(frozen=True, slots=True)
@@ -179,25 +181,32 @@ class LichessUser:
 
         history = []
         for i, mode in enumerate(rating_history):
-            mode_history = []
-            for day in rating_history[i]["points"]:
-                date = datetime(year=day[0], month=day[1] + 1, day=day[2])
-                day_before = date - timedelta(days=1)
+            try:
+                points = numpy.array(rating_history[i]["points"])
+                points[:, 1] += 1
+                dates = pandas.to_datetime(
+                    pandas.DataFrame(points[:, :3], columns=["year", "month", "day"])
+                )
+                ratings = pandas.Series(points[:, 3], index=dates)
+            except IndexError:
+                continue
 
-                if mode_history and day_before != mode_history[-1].date:
-                    mode_history.append(
-                        LichessHistoryPoint(
-                            mode_history[-1].rating,
-                            day_before,
-                        )
-                    )
+            # mode_history = pandas.DataFrame(columns=["rating", "date"])
 
-                mode_history.append(LichessHistoryPoint(day[-1], date))
+            final_ratings = ratings.copy()
+
+            for j, item in enumerate(ratings.items()):
+                date, _ = item
+                if j > 0:
+                    last_date = ratings.index.values[j - 1]
+
+                    if last_date != date - timedelta(days=1):
+                        final_ratings.loc[date - timedelta(days=1)] = ratings[last_date]
 
             history.append(
                 LichessHistoryData(
                     LichessMode(mode["name"]),
-                    mode_history,
+                    final_ratings.sort_index(),
                 )
             )
 
@@ -317,7 +326,7 @@ class LichessUserFormatter:
                 user.playtime,
                 suppress=["months", "years"],
                 minimum_unit="minutes",
-                format="%0.0f",
+                format="%0d",
             )
         else:
             display_time = "0 minutes"
@@ -331,7 +340,7 @@ class LichessUserFormatter:
                 user.tvtime,
                 suppress=["months", "years"],
                 minimum_unit="minutes",
-                format="%0.0f",
+                format="%0d",
             )
         else:
             display_time = "0 minutes"
@@ -471,10 +480,10 @@ class LichessUserFormatter:
             histories = [*filter(lambda x: x.mode.value == mode.value, user.history)]
             if histories:
                 history_data = histories[0]
-                if history_data.history:
+                if not history_data.history.empty:
                     ax.plot(
-                        [point.date for point in history_data.history],
-                        [point.rating for point in history_data.history],
+                        history_data.history.index.values,
+                        history_data.history.values,
                         label=history_data.mode.value,
                         color=ast.literal_eval(
                             CONSTANTS["lichess"]["mpl"][mode.name]["color"]
