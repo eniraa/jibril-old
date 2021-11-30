@@ -22,7 +22,7 @@ async def profile(ctx: lightbulb.context.Context) -> None:
         ctx (lightbulb.context.Context): The command's invocation context
     """
     user = await lichess_models.LichessUser.load(ctx.options.username)
-    embed = lichess_models.LichessUserFormatter.bio_embed(user)
+    embed = await lichess_models.LichessUserFormatter.bio_embed(ctx, user)
 
     history_embed = None
 
@@ -67,13 +67,19 @@ async def profile(ctx: lightbulb.context.Context) -> None:
         async for event in stream:
             match event.interaction.values[0]:
                 case "profile":
-                    embed = lichess_models.LichessUserFormatter.bio_embed(user)
+                    embed = await lichess_models.LichessUserFormatter.bio_embed(
+                        ctx, user
+                    )
                 case "rating":
-                    embed = lichess_models.LichessUserFormatter.rating_embed(user)
+                    embed = await lichess_models.LichessUserFormatter.rating_embed(
+                        ctx, user
+                    )
                 case "history":
                     if not history_embed:
                         history_embed = (
-                            await lichess_models.LichessUserFormatter.graph_embed(user)
+                            await lichess_models.LichessUserFormatter.graph_embed(
+                                ctx, user
+                            )
                         )
                     embed = history_embed
 

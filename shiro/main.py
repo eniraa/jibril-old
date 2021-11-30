@@ -7,6 +7,7 @@ import hikari
 import lightbulb
 
 import utils.defaults
+import utils.upload
 
 
 def main(

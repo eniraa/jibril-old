@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 import io
-import os
 
 import aiohttp
 import bs4
@@ -11,6 +10,7 @@ import hikari
 from hikari.embeds import EmbedField
 import hikari.files
 import humanize
+import lightbulb
 import matplotlib
 import matplotlib.pyplot as plt
 import orjson
@@ -18,6 +18,7 @@ import orjson
 from utils.defaults import CONSTANTS, MPL_COLOR
 import utils.flags
 from utils.markdown import escape
+from utils.upload import upload
 
 
 class LichessMode(Enum):
@@ -494,7 +495,9 @@ class LichessUserFormatter:
         return graph
 
     @staticmethod
-    def bio_embed(user: LichessUser) -> hikari.Embed:
+    async def bio_embed(
+        ctx: lightbulb.context.SlashContext, user: LichessUser
+    ) -> hikari.Embed:
         """Creates an embed with a user's biographical information.
 
         Args:
@@ -516,7 +519,9 @@ class LichessUserFormatter:
         return embed
 
     @staticmethod
-    def rating_embed(user: LichessUser) -> hikari.Embed:
+    async def rating_embed(
+        ctx: lightbulb.context.SlashContext, user: LichessUser
+    ) -> hikari.Embed:
         """Creates an embed with a user's ratings per mode.
 
         Args:
@@ -537,7 +542,9 @@ class LichessUserFormatter:
         return embed
 
     @staticmethod
-    async def graph_embed(user: LichessUser) -> hikari.Embed:
+    async def graph_embed(
+        ctx: lightbulb.context.SlashContext, user: LichessUser
+    ) -> hikari.Embed:
         """Creates an embed with a graph of the user's rating history.
 
         Args:
@@ -549,16 +556,10 @@ class LichessUserFormatter:
         embed = LichessUserFormatter._base_embed(user)
         embed.description = None
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                "https://api.imgbb.com/1/upload",
-                data={
-                    "key": os.environ["IMGBB_KEY"],
-                    "image": LichessUserFormatter._graph(user).read(),
-                },
-            ) as response:
-                imgbb = await response.json()
+        url = await upload(
+            ctx.bot, hikari.files.Bytes(LichessUserFormatter._graph(user), "graph.png")
+        )
 
-        embed.set_image(imgbb["data"]["url"])
+        embed.set_image(url)
 
         return embed
