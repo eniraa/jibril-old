@@ -14,6 +14,7 @@ import lightbulb
 import matplotlib
 import matplotlib.pyplot as plt
 import orjson
+import validators
 
 from utils.defaults import CONSTANTS, MPL_COLOR
 import utils.flags
@@ -410,14 +411,17 @@ class LichessUserFormatter:
         links = []
 
         for link in user.links.splitlines():
-            if link and not (link.startswith("https://") or link.startswith("http://")):
-                links.append(f"https://{link}")
-            else:
-                links.append(link)
+            if validators.url(link):
+                if link and not (
+                    link.startswith("https://") or link.startswith("http://")
+                ):
+                    links.append(f"https://{link}")
+                else:
+                    links.append(link)
 
         return EmbedField(
             name=f"{CONSTANTS['lichess']['emoji']['other']['link']} Links",
-            value=escape("\n".join(links)),
+            value="\n".join(links),
             inline=False,
         )
 

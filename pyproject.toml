@@ -16,6 +16,7 @@ aiohttp = {extras = ["speedups"], version = "^3.8.1"}
 orjson = "^3.6.4"
 matplotlib = "^3.5.0"
 humanize = "^3.13.1"
+validators = "^0.18.2"
 
 [tool.poetry.dev-dependencies]
 black = "^21.11b1"
