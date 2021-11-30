@@ -21,6 +21,13 @@ async def profile(ctx: lightbulb.context.Context) -> None:
     Args:
         ctx (lightbulb.context.Context): The command's invocation context
     """
+    user = await lichess_models.LichessUser.load(ctx.options.username)
+    embed = lichess_models.LichessUserFormatter.bio_embed(user)
+
+    if user.disabled:
+        await ctx.respond(embed)
+        return
+
     row = ctx.bot.rest.build_action_row()
 
     row.add_select_menu("navigation").set_placeholder("Navigate to…").add_option(
@@ -42,9 +49,6 @@ async def profile(ctx: lightbulb.context.Context) -> None:
     ).set_emoji(
         hikari.Emoji.parse(CONSTANTS["lichess"]["emoji"]["other"]["rating"])
     ).add_to_menu().add_to_container()
-
-    user = await lichess_models.LichessUser.load(ctx.options.username)
-    embed = lichess_models.LichessUserFormatter.bio_embed(user)
 
     message = await ctx.respond(embed, components=[row])
 
