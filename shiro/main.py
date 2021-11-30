@@ -56,7 +56,7 @@ if __name__ == "__main__":
             "modules": utils.defaults.MODULES,
         }
 
-        if "HOME_GUILD" in os.environ:
-            kwargs["guilds"] = (int(os.environ["HOME_GUILD"]),)
+        if "HOME_GUILDS" in os.environ:
+            kwargs["guilds"] = map(int, os.environ["HOME_GUILDS"].split(","))
 
         main(**kwargs)
