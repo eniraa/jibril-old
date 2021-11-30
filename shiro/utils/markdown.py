@@ -19,13 +19,13 @@ def _escape_mentions(text: str) -> str:
     return re.sub(r"@(everyone|here|[!&]?[0-9]{17,20})", "@\u200b\\1", text)
 
 
-def escape(text: str) -> str:
+def escape(text: str | None) -> str:
     """Escapes markdown and mentions in a string
 
     Args:
-        text (str): The string to sanitize
+        text (str | None): The string to sanitize
 
     Returns:
         str: The sanitized string
     """
-    return _escape_markdown(_escape_mentions(text))
+    return _escape_markdown(_escape_mentions(text or ""))
