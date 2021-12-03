@@ -2,7 +2,8 @@ import hikari
 import lightbulb
 
 from utils.defaults import CONSTANTS
-import utils.models.lichess as lichess_models
+from utils.models.lichess import LichessUser
+from utils.views.lichess import LichessUserEmbed, LichessUserFormatter
 
 
 @lightbulb.command("lichess", "All lichess commands")
@@ -15,25 +16,25 @@ async def lichess() -> None:
 @lightbulb.option("username", "The username of the profile to look up", str)
 @lightbulb.command("profile", "Return information about a profile")
 @lightbulb.implements(lightbulb.commands.SlashSubCommand)
-async def profile(ctx: lightbulb.context.Context) -> None:
+async def profile(ctx: lightbulb.context.SlashContext) -> None:
     """Returns information about a Lichess profile
 
     Args:
         ctx (lightbulb.context.Context): The command's invocation context
     """
-    user = await lichess_models.LichessUser.load(ctx.options.username)
-    embed = await lichess_models.LichessUserFormatter.bio_embed(ctx, user)
-
-    history_embed = None
+    user = await LichessUser.load(ctx.options.username)
+    formatter = LichessUserFormatter(user, ctx.bot)
 
     if user.disabled:
-        await ctx.respond(embed)
+        await ctx.respond(await formatter.embed())
         return
+
+    embed = await formatter.embed(LichessUserEmbed.bio)
 
     row = ctx.bot.rest.build_action_row()
 
     row.add_select_menu("navigation").set_placeholder("Navigate to…").add_option(
-        "User profile", "profile"
+        "User profile", "bio"
     ).set_description(
         "The user's biographical and profile-related information."
     ).set_emoji(
@@ -65,23 +66,7 @@ async def profile(ctx: lightbulb.context.Context) -> None:
         )
     ) as stream:
         async for event in stream:
-            match event.interaction.values[0]:
-                case "profile":
-                    embed = await lichess_models.LichessUserFormatter.bio_embed(
-                        ctx, user
-                    )
-                case "rating":
-                    embed = await lichess_models.LichessUserFormatter.rating_embed(
-                        ctx, user
-                    )
-                case "history":
-                    if not history_embed:
-                        history_embed = (
-                            await lichess_models.LichessUserFormatter.graph_embed(
-                                ctx, user
-                            )
-                        )
-                    embed = history_embed
+            embed = await formatter.embed(LichessUserEmbed(event.interaction.values[0]))
 
             try:
                 await event.interaction.create_initial_response(
