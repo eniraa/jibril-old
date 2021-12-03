@@ -26,7 +26,7 @@ async def profile(ctx: lightbulb.context.SlashContext) -> None:
     formatter = LichessUserFormatter(user, ctx.bot)
 
     if user.disabled:
-        await ctx.respond(formatter.embed())
+        await ctx.respond(await formatter.embed())
         return
 
     embed = await formatter.embed(LichessUserEmbed.bio)

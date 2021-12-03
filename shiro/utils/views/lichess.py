@@ -173,7 +173,7 @@ class LichessUserFormatter:
 
         return graph
 
-    async def embed(self, form: LichessUserEmbed) -> hikari.Embed:
+    async def embed(self, form: LichessUserEmbed | None = None) -> hikari.Embed:
         """Creates the embed for the user.
 
         Args:
