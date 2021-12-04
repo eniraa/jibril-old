@@ -18,3 +18,22 @@ def _tag(code: str) -> str:
         + "".join(chr(ord(char.upper()) + TAG_OFFSET) for char in code)
         + CANCELTAG
     )
+
+
+def flag(code: str) -> str:
+    """Generates a flag emoji based on a country code.
+
+    Args:
+        code (str): The country code to generate the flag for.
+
+    Raises:
+        ValueError: If the code is not a valid country code.
+
+    Returns:
+        str: The flag generated.
+    """
+    if len(code) == 2:
+        return _regional_indicator(code)
+    elif len(code) > 2:
+        return _tag(code)
+    raise ValueError("Invalid flag code")

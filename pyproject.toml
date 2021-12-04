@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "Jibril"
+name = "jibril"
 version = "0.1.0"
-description = "A Discord bot for chess players"
+description = "A Discord bot for chat games."
 authors = ["eniraa <47072520+eniraa@users.noreply.github.com>"]
 license = "GPL-3.0-only"
 
