@@ -1,6 +1,6 @@
 import lightbulb
 
-from . import lichess
+from . import commands
 
 
 def load(bot: lightbulb.BotApp) -> None:
@@ -9,4 +9,4 @@ def load(bot: lightbulb.BotApp) -> None:
     Args:
         bot (lightbulb.BotApp): The bot to load the module into
     """
-    lichess._load(bot)
+    commands._load(bot)

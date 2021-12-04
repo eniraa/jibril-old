@@ -7,7 +7,6 @@ import hikari
 import lightbulb
 
 import utils.defaults
-import utils.upload
 
 
 def main(
@@ -57,6 +56,6 @@ if __name__ == "__main__":
         }
 
         if "HOME_GUILDS" in os.environ:
-            kwargs["guilds"] = map(int, os.environ["HOME_GUILDS"].split(","))
+            kwargs["guilds"] = [*map(int, os.environ["HOME_GUILDS"].split(","))]
 
         main(**kwargs)
