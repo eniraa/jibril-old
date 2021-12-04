@@ -121,10 +121,7 @@ class LichessUser:
         """
         if self.country in CONSTANTS["lichess"]["emoji"]["flags"]:
             return CONSTANTS["lichess"]["emoji"]["flags"][self.country]
-        elif len(self.country) == 2:
-            return utils.flags._regional_indicator(self.country)
-        else:
-            return utils.flags._tag(self.country)
+        return utils.flags.flag(self.country)
 
     @classmethod
     async def load(cls, username: str) -> "LichessUser":

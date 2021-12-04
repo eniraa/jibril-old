@@ -32,12 +32,12 @@ def main(
         activity (hikari.Activity, optional): The activity to start the bot with.
             Defaults to utils.defaults.NIGHT_OPERA.
     """
-    shiro = lightbulb.BotApp(token=token, default_enabled_guilds=guilds)
+    jibril = lightbulb.BotApp(token=token, default_enabled_guilds=guilds)
 
     for module in modules:
-        importlib.import_module(module).load(shiro)
+        importlib.import_module(module).load(jibril)
 
-    shiro.run(
+    jibril.run(
         status=status,
         activity=activity,
     )
