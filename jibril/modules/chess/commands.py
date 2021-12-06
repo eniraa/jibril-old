@@ -44,4 +44,3 @@ async def profile(ctx: lightbulb.context.SlashContext) -> None:
 
 def _load(bot: lightbulb.BotApp) -> None:
     bot.command(chess)
-    # print(bot.slash_commands["chess"].children)

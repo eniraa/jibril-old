@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "A Discord bot for chat games."
 authors = ["eniraa <47072520+eniraa@users.noreply.github.com>"]
 license = "GPL-3.0-only"
+repository = "https://github.com/eniraa/jibril"
 
 [tool.poetry.dependencies]
 python = "3.10"

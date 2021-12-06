@@ -68,68 +68,84 @@
         },
         "mpl": {
             "chess960": {
-                "color": "'#E69F00'",
+                "color": "#E69F00",
                 "linestyle": "(0, (4, 1))"
             },
             "antichess": {
-                "color": "'#DF5353'",
+                "color": "#DF5353",
                 "linestyle": "(0, (1, 1))"
             },
             "atomic": {
-                "color": "'#66558C'",
+                "color": "#66558C",
                 "linestyle": "(0, (1, 1))"
             },
             "racingKings": {
-                "color": "'#FFAEAA'",
+                "color": "#FFAEAA",
                 "linestyle": "(0, (1, 1))"
             },
             "ultraBullet": {
-                "color": "'#009E73'",
+                "color": "#009E73",
                 "linestyle": "(0, (5, 3))"
             },
             "blitz": {
-                "color": "'#0072B2'",
+                "color": "#0072B2",
                 "linestyle": "'solid'"
             },
             "kingOfTheHill": {
-                "color": "'#D55E00'",
+                "color": "#D55E00",
                 "linestyle": "(0, (4, 1))"
             },
             "crazyhouse": {
-                "color": "'#56B4E9'",
+                "color": "#56B4E9",
                 "linestyle": "(0, (5, 3))"
             },
             "threeCheck": {
-                "color": "'#CC79A7'",
+                "color": "#CC79A7",
                 "linestyle": "(0, (1, 1))"
             },
             "bullet": {
-                "color": "'#56B4E9'",
+                "color": "#56B4E9",
                 "linestyle": "'solid'"
             },
             "correspondence": {
-                "color": "'#F0E442'",
+                "color": "#F0E442",
                 "linestyle": "(0, (4, 1))"
             },
             "horde": {
-                "color": "'#99E699'",
+                "color": "#99E699",
                 "linestyle": "(0, (5, 3))"
             },
             "puzzle": {
-                "color": "'#0072B2'",
+                "color": "#0072B2",
                 "linestyle": "(0, (5, 3))"
             },
             "classical": {
-                "color": "'#459F3B'",
+                "color": "#459F3B",
                 "linestyle": "'solid'"
             },
             "rapid": {
-                "color": "'#009E73'",
+                "color": "#009E73",
                 "linestyle": "'solid'"
             }
         },
         "assets": {
             "logo": "https://doggo.ninja/ABVuN2.png"
         }
+    },
+    "jibril": {
+        "emoji": {
+            "invite": "<:_:658538493949116428>",
+            "developer": "<:_:853277205264859156>",
+            "vcs": "<:_:917553876725555263>"
+        },
+        "assets": {
+            "banner": "https://doggo.ninja/EDdDZE.png",
+            "logo": "https://doggo.ninja/Kkjw5C.png"
+        },
+        "uri": {
+            "repo": "https://github.com/eniraa/jibril"
+        },
+        "permissions": 137439266880,
+        "devs": [393172660630323200, 660929334969761792]
     }
 }

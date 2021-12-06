@@ -151,9 +151,7 @@ class LichessUserFormatter:
                         history_data.history.index.values,
                         history_data.history.values,
                         label=history_data.mode.value,
-                        color=ast.literal_eval(
-                            CONSTANTS["lichess"]["mpl"][mode.name]["color"]
-                        ),
+                        color=CONSTANTS["lichess"]["mpl"][mode.name]["color"],
                         linestyle=ast.literal_eval(
                             CONSTANTS["lichess"]["mpl"][mode.name]["linestyle"]
                         ),
