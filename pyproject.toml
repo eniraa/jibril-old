@@ -13,7 +13,7 @@ uvloop = {version = "^0.16.0", markers = "sys_platform != 'win32'"}
 python-dotenv = "^0.19.1"
 beautifulsoup4 = "^4.10.0"
 aiohttp = {extras = ["speedups"], version = "^3.8.1"}
-orjson = "^3.6.4"
+orjson = "^3.6.5"
 matplotlib = "^3.5.0"
 humanize = "^3.13.1"
 validators = "^0.18.2"
