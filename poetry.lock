@@ -419,7 +419,7 @@ speedups = ["aiodns (>=3.0,<4.0)", "cchardet (>=2.1,<3.0)", "Brotli (>=1.0,<2.0)
 
 [[package]]
 name = "hikari-lightbulb"
-version = "2.0.4"
+version = "2.1.0"
 description = "A simple to use command handler for Hikari"
 category = "main"
 optional = false
@@ -427,9 +427,6 @@ python-versions = ">=3.8.0,<3.11"
 
 [package.dependencies]
 hikari = ">=2.0.0.dev104,<2.1.0"
-
-[package.extras]
-filament = ["lightbulb-filament (<1.0.0)"]
 
 [[package]]
 name = "humanize"
@@ -928,7 +925,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10"
-content-hash = "76c4b0c48bd5a5be2282cfb7312296ed1ed114e8c89a4bcd34b40fd81d102697"
+content-hash = "683ddea8d8a8342e9bb4cc3c130f05c9955467ef0508c244dcd333bb508bfa8c"
 
 [metadata.files]
 aiodns = [
@@ -1325,8 +1322,8 @@ hikari = [
     {file = "hikari-2.0.0.dev104.tar.gz", hash = "sha256:2cccd2c8ddb5896590a66034ae94a2215f4f993c5b38a99e5797518d819ffa1c"},
 ]
 hikari-lightbulb = [
-    {file = "hikari-lightbulb-2.0.4.tar.gz", hash = "sha256:b06692085cebc5407cda987bba0b228be6c7a1e91048dc6fdc3d8f051a955c0a"},
-    {file = "hikari_lightbulb-2.0.4-py3-none-any.whl", hash = "sha256:04c1834e5592909240fb5f6a3c49c5abd4bb1dd9cdaafdca252302423d30e64f"},
+    {file = "hikari-lightbulb-2.1.0.tar.gz", hash = "sha256:2975a095a56735cb8e882636948f2a529c69c03cf35a57d02a0bab6595e4fbd6"},
+    {file = "hikari_lightbulb-2.1.0-py3-none-any.whl", hash = "sha256:d81d013c5855820335988cd885b0158e8203fa11c5ee84bf002a744f9f39956e"},
 ]
 humanize = [
     {file = "humanize-3.13.1-py3-none-any.whl", hash = "sha256:a6f7cc1597db69a4e571ad5e19b4da07ee871da5a9de2b233dbfab02d98e9754"},
